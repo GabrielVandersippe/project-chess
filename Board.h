@@ -17,6 +17,7 @@ struct Piece {
 
 struct Pawn : public Piece {
 	Pawn(int color) : Piece(char(int('P') + 32 * color), color) {};
+	bool first_turn = true;
 };
 
 struct Rook : public Piece {
@@ -107,10 +108,10 @@ inline void Board::moveTo(Pos origin, Pos destination, bool &correct_move){
 					&& (destination.x == origin.x)  // On ne change pas de ligne
 					&& ((destination.y - origin.y == 2 * piece->color - 1) // On ne bouge que d'une case dans le bon sens
 						|| ((destination.y - origin.y == 4 * piece->color - 2) && !piece->has_moved))) // Ou bien au premier coup on peut aller plus loin.
-					|| (getPiece(destination)
+					|| (getPiece(destination) // Cas 2 : on mange en diagonale
 						&& (abs(destination.x - origin.x) == 1)
 						&& (destination.y - origin.y == 2 * piece->color - 1)
-						&& (getPiece(destination)->color != getPiece(origin)->color))) // Cas 2 : on mange en diagonale
+						&& (getPiece(destination)->color != getPiece(origin)->color))) 
 			{
 				correct_move = true; // On ne met à jour le booléen correct_move SSI le mouvement est valide.
 				if (getPiece(destination)) { delete getPiece(destination); }
