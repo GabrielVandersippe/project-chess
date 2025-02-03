@@ -26,6 +26,17 @@ inline Pos toPos(T t) {
 	return Pos(t[0], t[1]); 
 }
 
+template <typename T>
+struct CustomPos { // Permet de faire un vecteur 2 avec n'importe quel type.
+	T x;
+	T y;
+
+	CustomPos(T x, T y) : x(x), y(y) {};
+};
+
 inline Pos stringToPos(string s) { // Convertit un string sous la fortme "A1" en une pos
+	if (s.length() < 2) {
+		throw 'a';
+	}
 	return Pos(int(s[1] - 49), int(s[0]) - 65);
 }
