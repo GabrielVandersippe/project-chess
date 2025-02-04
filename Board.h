@@ -12,17 +12,17 @@ struct Piece {
 
 	Piece(char s,int c) : symbol(s), color(c), has_moved(false) {};
 
-	virtual void showMenaced(Pos pos,int color) { printf("placeholder never printed"); }
+	virtual void showMenaced(Pos<int> pos,int color) { printf("placeholder never printed"); }
 };
 
 struct Pawn : public Piece {
 	Pawn(int color) : Piece(char(int('P') + 32 * color), color) {};
 
-	void showMenaced(Pos pos, int color) {
+	void showMenaced(Pos<int> pos, int color) {
 		for (int i = 0; i < 8; i++) {
 			cout << char(i + 65) << " | ";
 			for (int j = 0; j < 8; j++) {
-				if (Pos(j, i) == pos) {
+				if (Pos<int>(j, i) == pos) {
 					cout << char(int('P') + 32 * color) << ' ';
 				}
 				else if ((i == pos.y + (2 * color - 1)) && (abs(pos.x - j) == 1)) {
@@ -45,11 +45,11 @@ struct Pawn : public Piece {
 struct Rook : public Piece {
 	Rook(int color) : Piece(char(int('R') + 32 * color), color) {};
 
-	void showMenaced(Pos pos, int color) {
+	void showMenaced(Pos<int> pos, int color) {
 		for (int i = 0; i < 8; i++) {
 			cout << char(i + 65) << " | ";
 			for (int j = 0; j < 8; j++) {
-				if (Pos(j, i) == pos) {
+				if (Pos<int>(j, i) == pos) {
 					cout << char(int('R') + 32 * color) << ' ';
 				}
 				else if ((i == pos.y) || (j == pos.x)) {
@@ -72,11 +72,11 @@ struct Rook : public Piece {
 struct King : public Piece {
 	King(int color) : Piece(char(int('K') + 32 * color), color) {};
 
-	void showMenaced(Pos pos, int color) {
+	void showMenaced(Pos<int> pos, int color) {
 		for (int i = 0; i < 8; i++) {
 			cout << char(i + 65) << " | ";
 			for (int j = 0; j < 8; j++) {
-				if (Pos(j, i) == pos) {
+				if (Pos<int>(j, i) == pos) {
 					cout << char(int('K') + 32 * color) << ' ';
 				}
 				else if ((abs(i - pos.y) <= 1) && (abs(j - pos.x) <= 1) && (((i == pos.y) || (j == pos.x)) || abs(i - pos.y) == abs(j - pos.x))) {
@@ -99,11 +99,11 @@ struct King : public Piece {
 struct Queen : public Piece {
 	Queen(int color) : Piece(char(int('Q') + 32 * color), color) {};
 
-	void showMenaced(Pos pos, int color) {
+	void showMenaced(Pos<int> pos, int color) {
 		for (int i = 0; i < 8; i++) {
 			cout << char(i + 65) << " | ";
 			for (int j = 0; j < 8; j++) {
-				if (Pos(j, i) == pos) {
+				if (Pos<int>(j, i) == pos) {
 					cout << char(int('Q') + 32 * color) << ' ';
 				}
 				else if (((i == pos.y) || (j == pos.x)) || abs(i - pos.y) == abs(j - pos.x)) {
@@ -126,11 +126,11 @@ struct Queen : public Piece {
 struct Knight : public Piece {
 	Knight(int color) : Piece(char(int('H') + 32 * color), color) {}; // H pour Horse
 
-	void showMenaced(Pos pos, int color) {
+	void showMenaced(Pos<int> pos, int color) {
 		for (int i = 0; i < 8; i++) {
 			cout << char(i + 65) << " | ";
 			for (int j = 0; j < 8; j++) {
-				if (Pos(j, i) == pos) {
+				if (Pos<int>(j, i) == pos) {
 					cout << char(int('R') + 32 * color) << ' ';
 				}
 				else if ((abs(pos.y - i) == 1 && abs(pos.x - j == 2)) || (abs(pos.y - i) == 2 && abs(pos.x - j == 1))) {
@@ -153,11 +153,11 @@ struct Knight : public Piece {
 struct Bishop : public Piece {
 	Bishop(int color) : Piece(char(int('B') + 32 * color), color) {};
 
-	void showMenaced(Pos pos, int color) {
+	void showMenaced(Pos<int> pos, int color) {
 		for (int i = 0; i < 8; i++) {
 			cout << char(i + 65) << " | ";
 			for (int j = 0; j < 8; j++) {
-				if (Pos(j, i) == pos) {
+				if (Pos<int>(j, i) == pos) {
 					cout << char(int('B') + 32 * color) << ' ';
 				}
 				else if (abs(i - pos.y) == abs(j-pos.x)) {
@@ -180,24 +180,24 @@ struct Bishop : public Piece {
 struct Board {
 	Piece* cases[8][8];
 
-	void moveTo(Pos origin, Pos destination, bool &correct_move);
+	void moveTo(Pos<int> origin, Pos<int> destination, bool &correct_move);
 
-	bool usualMoveChecks(Pos origin, Pos destination);
+	bool usualMoveChecks(Pos<int> origin, Pos<int> destination);
 
-	bool isMenaced(Pos pos, Piece* myself);
+	bool isMenaced(Pos<int> pos, Piece* myself);
 
-	bool freePath(Pos origin, Pos destination);
+	bool freePath(Pos<int> origin, Pos<int> destination);
 
 	bool noMoreMoves(int color); //Regarde si le roi de la couleur donnée peut encore bouger.
 
-	Piece* getPiece(Pos pos) { 
+	Piece* getPiece(Pos<int> pos) { 
 		if (0<=pos.x && 8>pos.x && 0 <= pos.y && 8 > pos.y) return cases[pos.x][pos.y]; 
 		else throw 1; // On throw 1 si jamais le getPiece est appelé en dehors de ses limites
 	};
-	void setPiece(Pos pos, Piece* p) { cases[pos.x][pos.y] = p; }
+	void setPiece(Pos<int> pos, Piece* p) { cases[pos.x][pos.y] = p; }
 
-	Pos blackKingPos = Pos(4,7);
-	Pos whiteKingPos = Pos(4,0);
+	Pos<int> blackKingPos = Pos<int>(4,7);
+	Pos<int> whiteKingPos = Pos<int>(4,0);
 
 	Board() {
 
@@ -280,7 +280,7 @@ struct Board {
 	}
 };
 
-inline bool Board::usualMoveChecks(Pos origin, Pos destination) {
+inline bool Board::usualMoveChecks(Pos<int> origin, Pos<int> destination) {
 	return ((destination.x >= 0)
 		&& (destination.x < 8)
 		&& (destination.y >= 0)
@@ -289,20 +289,20 @@ inline bool Board::usualMoveChecks(Pos origin, Pos destination) {
 		&& (!getPiece(destination) || (getPiece(destination)->color != getPiece(origin)->color))); //Vrai pour tous, sauf pion.
 }
 
-inline bool Board::freePath(Pos origin, Pos destination) {
+inline bool Board::freePath(Pos<int> origin, Pos<int> destination) {
 	bool is_free = true;
 
 	if (origin.x == destination.x) {
 		int y = min(destination.y, origin.y);
 		for (int i = 1; i < abs(destination.y - origin.y); i++) {
-			is_free = is_free && !getPiece(Pos(origin.x, y + i));
+			is_free = is_free && !getPiece(Pos<int>(origin.x, y + i));
 		}
 	}
 	else if (origin.y == destination.y)
 	{
 		int x = min(origin.x, destination.x);
 		for (int i = 1; i < abs(destination.x - origin.x); i++) {
-			is_free = is_free && !getPiece(Pos(x + i, origin.y));
+			is_free = is_free && !getPiece(Pos<int>(x + i, origin.y));
 		}
 	}
 	else
@@ -310,7 +310,7 @@ inline bool Board::freePath(Pos origin, Pos destination) {
 		int x = min(origin.x, destination.x);
 		int y = min(destination.y, origin.y);
 		for (int i = 1; i < abs(destination.x - origin.x); i++) {
-			is_free = is_free && !getPiece(Pos(x + i, y + i));
+			is_free = is_free && !getPiece(Pos<int>(x + i, y + i));
 		}
 	}
 	return is_free;
@@ -319,10 +319,10 @@ inline bool Board::freePath(Pos origin, Pos destination) {
 inline bool Board::noMoreMoves(int color) {
 	bool canMove = false;
 
-	Pos pos = (color == 1) ? whiteKingPos : blackKingPos;
+	Pos<int> pos = (color == 1) ? whiteKingPos : blackKingPos;
 	for (int i = -1; i < 1; i++) {
 		for (int j = -1; j < 1; j++) {
-			if ((pos.x + i < 8) && (pos.x >= 0) && (pos.y + j < 8) && (pos.y + j >= 0) && (!getPiece(pos + Pos(i,j)) || getPiece(pos + Pos(i, j))-> color == 1 - color)) {
+			if ((pos.x + i < 8) && (pos.x >= 0) && (pos.y + j < 8) && (pos.y + j >= 0) && (!getPiece(pos + Pos<int>(i,j)) || getPiece(pos + Pos<int>(i, j))-> color == 1 - color)) {
 				canMove = canMove && isMenaced(pos, getPiece(pos));
 			}
 		}
@@ -330,7 +330,7 @@ inline bool Board::noMoreMoves(int color) {
 	return canMove;
 }
 
-inline bool Board::isMenaced(Pos pos, Piece* myself) {
+inline bool Board::isMenaced(Pos<int> pos, Piece* myself) {
 	bool menaced = false;
 	
 	int color = myself->color;
@@ -456,7 +456,7 @@ inline bool Board::isMenaced(Pos pos, Piece* myself) {
 
 	for (int i = 0; i < 8; i++) {
 		try {
-			p = getPiece(pos + toPos<int*>(knightMoves[i]));
+			p = getPiece(pos + toPos<int,int*>(knightMoves[i]));
 			menaced = menaced || (p && p->symbol == char(int('H') + 32 * (1 - color)));
 		}
 		catch (int) {}
@@ -465,7 +465,7 @@ inline bool Board::isMenaced(Pos pos, Piece* myself) {
 	return menaced;
 }
 
-inline void Board::moveTo(Pos origin, Pos destination, bool &correct_move){
+inline void Board::moveTo(Pos<int> origin, Pos<int> destination, bool &correct_move){
 
 	Piece* piece = getPiece(origin);
 

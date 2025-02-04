@@ -2,11 +2,12 @@
 #include <string>
 using namespace std;
 
+template <typename T>
 struct Pos {
-	int x;
-	int y;
+	T x;
+	T y;
 	
-	Pos(int x, int y) : x(x), y(y) {}
+	Pos(T x, T y) : x(x), y(y) {}
 
 	bool operator!= (const Pos& pos) {
 		return (pos.x != x) || (pos.y != y);
@@ -21,22 +22,14 @@ struct Pos {
 	}
 };
 
-template <typename T> // Transforme un ensemble à deux éléments quelconque en une position
-inline Pos toPos(T t) {
-	return Pos(t[0], t[1]); 
+template <typename T1, typename T2> // Transforme un ensemble à deux éléments quelconque en une position
+inline Pos<T1> toPos(T2 t) {
+	return Pos<T1>(t[0], t[1]); 
 }
 
-template <typename T>
-struct CustomPos { // Permet de faire un vecteur 2 avec n'importe quel type.
-	T x;
-	T y;
-
-	CustomPos(T x, T y) : x(x), y(y) {};
-};
-
-inline Pos stringToPos(string s) { // Convertit un string sous la fortme "A1" en une pos
+inline Pos<int> stringToPos(string s) { // Convertit un string sous la fortme "A1" en une pos
 	if (s.length() < 2) {
 		throw 'a';
 	}
-	return Pos(int(s[1] - 49), int(s[0]) - 65);
+	return Pos<int>(int(s[1] - 49), int(s[0]) - 65);
 }

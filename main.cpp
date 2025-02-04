@@ -5,7 +5,7 @@ using namespace std;
 
 //////////////////////////////////////////////////////////////////
 // Exemples d'implementation d'elements importants :
-// 1. Templates : Fichier "VecMath.h", ligne 24
+// 1. Templates : Fichier "VecMath.h", ligne 6, utilisation de Pos<int> dans tout le fichier "Board.h"
 // 2. Classes dérivées : Fichier "Board.h", lignes 18 etc.
 // 3. Erreurs : Fichiers "main.cpp" et "VecMath.h" par exemple, pour des throw, try et catch.
 // 4. Héritage virtuel : Fichier "Board.h", lignes 18 etc.
@@ -24,7 +24,7 @@ int main() {
 	cout << "POUR ACCEDER A L'AIDE, TAPER 'Help' AU DEBUT D'UN TOUR. \n" << endl;
 
 	while (!game_ended) {
-		cout << "Tour : " << turn << endl;
+		cout << "Tour : " << (turn==1 ? "Blancs (minuscules)" : "Noirs (majuscules)") << endl;
 		board.show();
 
 		string origin;
@@ -90,7 +90,11 @@ int main() {
 			}
 		}
 		
-		game_ended = board.noMoreMoves(0) || board.noMoreMoves(1);
+		if (board.noMoreMoves(0) || board.noMoreMoves(1)) {
+			game_ended = true;
+			cout << "Fin de la partie !" << endl;
+			cout << "Victoire des " << (board.noMoreMoves(1) ? "Noirs" : "Blancs") << endl;
+		}
 
 		turn = 1 - turn;
 	}
